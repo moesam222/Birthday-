@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday My Love</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Comic Sans MS', sans-serif; overflow-x: hidden; }
+    
+    .hidden { display: none; }
+    
+    .animate-float { animation: float 15s infinite linear; }
+    .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+    .animate-slide-up { animation: slideUp 0.8s ease-out forwards; }
+    
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity:0; }
+      10% { opacity:1; }
+      90% { opacity:1; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity:0; }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity:0; transform:scale(0.95); }
+      to { opacity:1; transform:scale(1); }
+    }
+    
+    @keyframes slideUp {
+      from { opacity:0; transform:translateY(50px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    /* Confetti styles */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      z-index: 50;
+      pointer-events: none;
+      opacity: 0.9;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body class="bg-pink-100 flex items-center justify-center min-h-screen relative">
+
+  <!-- Background hearts -->
+  <div id="hearts" class="absolute inset-0 pointer-events-none"></div>
+
+  <!-- Audio -->
+  <audio id="bgMusic" loop autoplay>
+    <source src="https://assets.mixkit.co/music/preview/mixkit-cute-happy-pop-2017.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- PAGE 1: Birthday Puzzle -->
+  <div id="page1" class="bg-white rounded-3xl p-8 max-w-md text-center shadow-2xl border-2 border-pink-300 animate-fade-in">
+    <h1 class="text-3xl text-pink-600 mb-4">🎉 Happy Birthday My Love! 🎉</h1>
+    <p class="text-gray-700 mb-6 text-lg">On this day, the cutest girl in the world was born ❤️</p>
+    <p class="text-gray-700 mb-2">Enter your birthday to continue:</p>
+    <input type="text" id="birthdayInput" placeholder="DD Month YYYY" class="p-2 rounded border border-pink-300 text-center w-full mb-4">
+    <button id="checkBirthday" class="bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600">Submit</button>
+    <p id="birthdayError" class="text-red-500 mt-2 hidden">Oops! Try again 😅</p>
+  </div>
+
+  <!-- PAGE 2: Love Puzzle -->
+  <div id="page2" class="hidden bg-white rounded-3xl p-8 max-w-md text-center shadow-2xl border-2 border-pink-300 animate-fade-in">
+    <h1 class="text-3xl text-pink-600 mb-4">💖 Do you love your boyfriend? 💖</h1>
+    <div class="flex justify-center space-x-4 mt-6">
+      <button id="yesBtn" class="bg-pink-500 text-white px-6 py-3 rounded hover:bg-pink-600">Yes</button>
+      <button id="noBtn" class="bg-gray-300 text-gray-700 px-6 py-3 rounded hover:bg-gray-400">No</button>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Love Letter -->
+  <div id="page3" class="hidden bg-white rounded-3xl p-8 max-w-md text-center shadow-2xl border-2 border-pink-300 animate-fade-in">
+    <h1 class="text-3xl text-pink-600 mb-4">❤️ Happy Birthday, My Baby ❤️</h1>
+    <p class="text-gray-700 text-lg mb-4">
+      Lina Lili, my love, my baby…  
+      On this special day, I want you to know how incredibly lucky I feel to have you in my life.  
+      You are beautiful, kind, and the most amazing girl in the world. I promise to love you, support you, and make you happy every single day.  
+      I can't wait for our future together, the laughter, the adventures, and all the memories we’ll create as I get to be your boyfriend, your future husband, and your forever.  
+      Happy Birthday, my love! ❤️
+    </p>
+  </div>
+
+  <script>
+    // Floating hearts
+    const heartsContainer = document.getElementById("hearts");
+    for(let i=0;i<25;i++){
+      const heart = document.createElement("span");
+      heart.textContent = "❤️";
+      heart.className = "absolute animate-float";
+      heart.style.left = Math.random()*100 + "vw";
+      heart.style.fontSize = 20 + Math.random()*30 + "px";
+      heart.style.animationDelay = Math.random()*5 + "s";
+      heartsContainer.appendChild(heart);
+    }
+
+    // PAGE 1
+    const birthdayInput = document.getElementById("birthdayInput");
+    const checkBirthday = document.getElementById("checkBirthday");
+    const birthdayError = document.getElementById("birthdayError");
+    const page1 = document.getElementById("page1");
+    const page2 = document.getElementById("page2");
+    const page3 = document.getElementById("page3");
+
+    checkBirthday.addEventListener("click", () => {
+      if(birthdayInput.value.trim() === "30 November 2008"){
+        page1.classList.add("hidden");
+        page2.classList.remove("hidden");
+      } else {
+        birthdayError.classList.remove("hidden");
+      }
+    });
+
+    // PAGE 2: NO button runs away
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    noBtn.addEventListener("mouseenter", () => {
+      const x = Math.random() * 70;
+      const y = Math.random() * 50;
+      noBtn.style.transform = `translate(${x}vw, ${y}vh)`;
+    });
+
+    yesBtn.addEventListener("click", () => {
+      page2.classList.add("hidden");
+      page3.classList.remove("hidden");
+      launchConfetti();
+    });
+
+    // Confetti effect
+    function launchConfetti(){
+      const colors = ["#FF5B5B","#FFC371","#FF85A2","#FFB6B9","#FF61A6"];
+      for(let i=0;i<150;i++){
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+        confetti.style.left = Math.random()*100 + "vw";
+        confetti.style.top = "-10px";
+        document.body.appendChild(confetti);
+
+        let angle = Math.random()*2*Math.PI;
+        let speed = 2 + Math.random()*3;
+        let rotate = Math.random()*360;
+        let rotationSpeed = (Math.random()-0.5)*10;
+        let posY = -10;
+
+        function fall(){
+          posY += speed;
+          confetti.style.top = posY + "px";
+          confetti.style.transform = `rotate(${rotate}deg)`;
+          rotate += rotationSpeed;
+          if(posY < window.innerHeight + 20){
+            requestAnimationFrame(fall);
+          } else {
+            confetti.remove();
+          }
+        }
+        fall();
+      }
+    }
+  </script>
+
+</body>
+</html>
